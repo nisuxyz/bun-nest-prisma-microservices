@@ -1,0 +1,15 @@
+FROM docker.io/oven/bun:latest
+
+RUN apt update
+RUN apt install -y openssl
+
+RUN useradd -ms /bin/sh -u 1001 app
+USER app
+
+WORKDIR /app
+COPY --chown=app:app package.json bun.lock ./
+RUN bun install
+
+COPY --chown=app:app . /app
+
+CMD ["bun", "run", "start:dev"]
