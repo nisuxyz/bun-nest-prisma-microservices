@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: micro-services-blog
+  template:
+    metadata:
+      labels:
+        app: micro-services-blog
+    spec:
+      containers:
+      - name: auth-service
+        # Placeholder image - we'll override this in local overlay
+        image: auth-service:latest
+        ports:
+        - containerPort: 3000
+          name: http
+        env:
+        - name: NODE_ENV
+          value: development
+        - name: PORT
+          value: "3000"
