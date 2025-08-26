@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+  labels:
+    app: micro-services-blog
+spec:
+  selector:
+    matchLabels:
+      app: micro-services-blog
+  template:
+    metadata:
+      labels:
+        app: micro-services-blog
+    spec:
+      initContainers:
+      # This container runs before the main auth-service container
+      - name: wait-for-postgres
+        image: busybox:1.35
+        command: 
+        - sh
+        - -c
+        - |
+          echo "Waiting for PostgreSQL to be ready..."
+          until nc -z auth-postgres 5432; do
+            echo "PostgreSQL is not ready yet. Waiting..."
+            sleep 2
+          done
+          echo "PostgreSQL is ready!"
+      containers:
+      - name: auth-service
+        image: auth-service:latest
+        ports:
+        - containerPort: 3000
+          name: http
+        # envs are added via configMap in overlays
+        # Uncomment below to hardcode env vars (not recommended)
+        # env:
+        # - name: NODE_ENV
+        #   value: development
+        # - name: PORT
+        #   value: "3000"
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 256Mi

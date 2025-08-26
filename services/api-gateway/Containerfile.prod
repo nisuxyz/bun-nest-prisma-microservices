@@ -1,0 +1,43 @@
+# Multi-stage production build
+FROM oven/bun:1-alpine as base
+WORKDIR /app
+
+# Install dependencies (separate layer for caching)
+FROM base as deps
+COPY package.json bun.lockb ./
+RUN bun install --frozen-lockfile --production
+
+# Build stage
+FROM base as build
+COPY package.json bun.lockb ./
+RUN bun install --frozen-lockfile
+COPY . .
+RUN bun run build || echo "No build script, skipping..."
+
+# Production stage
+FROM oven/bun:1-alpine as production
+WORKDIR /app
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S bunuser -u 1001
+
+# Copy dependencies and built application
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=build --chown=bunuser:nodejs /app/src ./src
+COPY --from=build --chown=bunuser:nodejs /app/lib ./lib
+COPY --from=build --chown=bunuser:nodejs /app/db ./db
+COPY --from=build --chown=bunuser:nodejs /app/package.json ./
+
+# Create directory for PGLite data
+RUN mkdir -p /app/pglite && chown bunuser:nodejs /app/pglite
+
+USER bunuser
+
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD bun -e "fetch('http://localhost:3000/health').then(r => r.ok ? process.exit(0) : process.exit(1))" || exit 1
+
+CMD ["bun", "run", "start"]

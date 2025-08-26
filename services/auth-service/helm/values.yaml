@@ -1,0 +1,107 @@
+# Default values for auth-service
+replicaCount: 2
+
+image:
+  repository: spinroute-auth-service
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 3000
+  targetPort: 3000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: auth-service.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# Database configuration
+database:
+  # PostgreSQL configuration
+  type: postgresql
+  host: postgres-service
+  port: 5432
+  name: auth_db
+  username: auth_user
+  password: auth_password  # Change this in production
+  existingSecret: ""  # Use this instead of password for production
+  passwordKey: password
+  
+  # Full connection URL (alternative to individual fields)
+  # url: "postgresql://auth_user:password@postgres-service:5432/auth_db"
+
+# Auth configuration
+auth:
+  secret: "change-this-in-production"
+  url: "http://auth-service:3000"
+  tokenExpiry: "7d"
+
+# Service secrets
+secrets:
+  apiGatewaySecret: "change-this-gateway-secret"
+  internalServiceSecret: "change-this-service-secret"
+
+# CORS configuration
+cors:
+  origins: "http://localhost:3000,https://yourdomain.com"
+
+# Environment
+environment: development
+
+# Health checks
+healthCheck:
+  enabled: true
+  path: /health
+  port: 3000
+
+# Probes
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 3000
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: 3000
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+# Horizontal Pod Autoscaler
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+# Service Monitor for Prometheus
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  path: /metrics

@@ -1,0 +1,14 @@
+{
+  "name": "micro-services-blog",
+  "private": true,
+  "scripts": {
+    "k8s:local": "minikube kubectl -- apply -k ./k8s/overlays/local",
+    "k8s:local:dry": "minikube kubectl -- kustomize ./k8s/overlays/local",
+    "k8s:local:delete": "minikube kubectl -- delete -k ./k8s/overlays/local",
+    "k8s:pods": "minikube kubectl -- get pods",
+    "k8s:pods:watch": "minikube kubectl -- get pods -w",
+    "k8s:services": "minikube kubectl -- get services",
+    "k8s:services:watch": "minikube kubectl -- get services -w",
+    "k8s:logs:auth": "minikube kubectl -- logs -l app=micro-services-blog -f"
+  }
+}

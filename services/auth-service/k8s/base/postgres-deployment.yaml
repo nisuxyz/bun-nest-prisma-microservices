@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-postgres
+  labels:
+    app: micro-services-blog
+spec:
+  replicas: 1  # PostgreSQL doesn't support multiple replicas without additional setup
+  selector:
+    matchLabels:
+      app: micro-services-blog
+  template:
+    metadata:
+      labels:
+        app: micro-services-blog
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15-alpine  # Alpine for smaller image size
+        ports:
+        - containerPort: 5432
+          name: postgres
+        # env:
+        # # These will be overridden by secrets in production
+        # - name: POSTGRES_DB
+        #   value: spinroute_auth
+        # - name: POSTGRES_USER
+        #   value: user
+        # - name: POSTGRES_PASSWORD
+        #   value: localdevpassword  # Will be replaced with secret in overlay
+        volumeMounts:
+        - name: postgres-storage
+          mountPath: /var/lib/postgresql/data
+          # PostgreSQL needs a subdirectory for its data
+          subPath: postgres
+        # Health checks ensure the database is ready before services connect
+        readinessProbe:
+          exec:
+            command:
+              - pg_isready
+              - -U
+              - user
+              - -d
+              - spinroute_auth
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        livenessProbe:
+          exec:
+            command:
+              - pg_isready
+              - -U
+              - user
+          initialDelaySeconds: 45
+          periodSeconds: 30
+      # volumes:
+      # - name: postgres-storage
+      #   hostPath:
+      #     path: /host-mount/services/auth-service/.postgres
+      #     type: DirectoryOrCreate
+      #   persistentVolumeClaim:
+      #     claimName: auth-postgres-pvc

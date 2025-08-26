@@ -1,0 +1,18 @@
+# deps
+node_modules/
+
+# postgres
+.postgres/
+
+.env
+.env.local
+.env.*.local
+.env.example
+
+.DS_Store
+
+Dockerfile*
+Containerfile*
+*compose.yaml
+
+README.md
