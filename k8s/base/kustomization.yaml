@@ -3,7 +3,8 @@ kind: Kustomization
 
   # Reference service configurations using relative paths
 resources:
-- ../../services/auth-service/k8s/base
+# - ../../services/auth-service/k8s/base
+- ./ingress.yaml
 
 labels:
 - includeSelectors: true

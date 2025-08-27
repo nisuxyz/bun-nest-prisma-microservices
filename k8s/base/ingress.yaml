@@ -1,15 +1,16 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: microblog-ingress
+  name: micro-services-blog-ingress
+  labels:
+    app: micro-services-blog
   annotations:
     # These annotations configure the ingress controller behavior
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    # nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   rules:
-  - host: "*"
-    http:
+  - http:
       paths:
       # API Gateway handles all /api/* requests
       - path: /api(/|$)(.*)

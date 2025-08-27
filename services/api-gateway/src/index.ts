@@ -10,8 +10,8 @@ const app = new Hono()
 // Health check routes (must be before auth routes)
 app.route('/', healthRouter);
 
-app.get('/', (c) => {
-  return c.text('hello auth-service')
+app.get('/api/hello', (c) => {
+  return c.text('hello api-gateway')
 })
   .on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
 
