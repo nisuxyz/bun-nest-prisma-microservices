@@ -247,7 +247,7 @@ Required environment variables:
 
 ```env
 # Database (PostgreSQL connection string)
-DATABASE_URL=postgresql://user:password@postgres-service:5432/spinroute_auth
+DATABASE_URL=postgresql://userlocaldevpasswordpostgres-service:5432/auth_db
 
 # Auth
 BETTER_AUTH_SECRET=your_production_secret
@@ -354,7 +354,7 @@ Your compose setup includes:
 If you prefer to run PostgreSQL locally:
 
 1. Install and start PostgreSQL
-2. Create database: `createdb spinroute_auth`
+2. Create database: `createdb auth_db`
 3. Update `.env` with your local connection string
 4. Run migrations: `bun run drizzle:push`
 5. Start dev server: `bun run start:dev:hot`

@@ -23,9 +23,9 @@ spec:
       containers:
         - env:
             - name: POSTGRES_DB
-              value: spinroute_auth
+              value: auth_db
             - name: POSTGRES_PASSWORD
-              value: password
+              value: localdevpassword
             - name: POSTGRES_USER
               value: user
           image: docker.io/postgres:latest

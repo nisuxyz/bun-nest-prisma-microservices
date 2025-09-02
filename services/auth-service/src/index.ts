@@ -4,6 +4,7 @@ import { Glob } from "bun";
 
 import { auth } from '../lib/auth';
 import { healthRouter } from './health';
+import { db } from '~lib/drizzle';
 
 const app = new Hono()
 
@@ -13,6 +14,14 @@ app.route('/', healthRouter);
 app.get('/', (c) => {
   return c.text('hello auth-service')
 })
+  .get('/api/db-cxn-test', async (c) => {
+    try {
+      const result = await db.execute('SELECT * FROM user');
+      return c.json({ success: true, result });
+    } catch (error) {
+      return c.json({ success: false, error: (error as Error).message }, 500);
+    }
+  })
   .on(["POST", "GET"], "/api/auth/**", (c) => auth.handler(c.req.raw));
 
 async function loadRoutes() {

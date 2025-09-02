@@ -5,9 +5,8 @@ metadata:
   labels:
     app: micro-services-blog
 spec:
-  selector:
-    app: micro-services-blog
+  type: NodePort
   ports:
-  - port: 5432
-    targetPort: postgres
-  type: ClusterIP
+    - port: 5432
+  selector:
+    app: postgres

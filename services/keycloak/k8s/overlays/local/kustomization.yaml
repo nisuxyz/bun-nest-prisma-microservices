@@ -1,0 +1,37 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ../../base
+- keycloak-realm-configmap.yaml
+
+secretGenerator:
+- literals:
+  - KEYCLOAK_ADMIN_PASSWORD=admin123
+  - KC_DB_PASSWORD=keycloakpass123
+  - DB_PASSWORD=keycloakpass123
+  name: keycloak-secrets
+
+configMapGenerator:
+- literals:
+  - KC_HOSTNAME=localhost
+  - KC_HOSTNAME_PORT=8080
+  - KC_HOSTNAME_STRICT=false
+  - KC_HTTP_ENABLED=true
+  - KC_PROXY=edge
+  name: keycloak-config
+
+patches:
+- path: deployment-patch.yaml
+  target:
+    kind: Deployment
+    name: keycloak
+- path: postgres-patch.yaml
+  target:
+    kind: Deployment
+    name: keycloak-postgres
+
+labels:
+- includeSelectors: true
+  pairs:
+    variant: local-dev

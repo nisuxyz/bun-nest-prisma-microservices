@@ -47,7 +47,7 @@ database:
   passwordKey: password
   
   # Full connection URL (alternative to individual fields)
-  # url: "postgresql://auth_user:password@postgres-service:5432/auth_db"
+  # url: "postgresql://auth_userlocaldevpasswordpostgres-service:5432/auth_db"
 
 # Auth configuration
 auth:

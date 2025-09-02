@@ -12,12 +12,22 @@ spec:
   rules:
   - http:
       paths:
-      # API Gateway handles all /api/* requests
+      # # API Gateway handles all /api/* requests
+      # - path: /api(/|$)(.*)
+      #   pathType: ImplementationSpecific
+      #   backend:
+      #     service:
+      #       name: api-gateway
+      #       port:
+      #         number: 80
+
+      
+      # send requests to auth service for testing
       - path: /api(/|$)(.*)
         pathType: ImplementationSpecific
         backend:
           service:
-            name: api-gateway
+            name: auth-service
             port:
               number: 80
       
@@ -29,3 +39,11 @@ spec:
             name: frontend
             port:
               number: 80
+
+      # - path: /keycloak
+      #   pathType: Prefix
+      #   backend:
+      #     service:
+      #       name: keycloak
+      #       port:
+      #         number: 8080

@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+      - name: keycloak
+        image: quay.io/keycloak/keycloak:25.0
+        args:
+          - start-dev  # Development mode - will change for production
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        # Admin credentials for first-time setup
+        - name: KEYCLOAK_ADMIN
+          value: admin
+        - name: KEYCLOAK_ADMIN_PASSWORD
+          value: changeme  # Override in overlay with secret
+        
+        # Database configuration
+        - name: KC_DB
+          value: postgres
+        - name: KC_DB_URL_HOST
+          value: keycloak-postgres
+        - name: KC_DB_URL_PORT
+          value: "5432"
+        - name: KC_DB_URL_DATABASE
+          value: keycloak
+        - name: KC_DB_USERNAME
+          value: keycloak
+        - name: KC_DB_PASSWORD
+          value: changeme  # Override in overlay with secret
+        
+        # Hostname configuration for local development
+        - name: KC_HOSTNAME
+          value: keycloak.local
+        - name: KC_HOSTNAME_STRICT
+          value: "false"
+        - name: KC_HTTP_ENABLED
+          value: "true"
+        
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 8080
+          initialDelaySeconds: 180
+          periodSeconds: 30
+        
+        resources:
+          requests:
+            memory: "1024Mi"
+            cpu: "500m"
+          limits:
+            memory: "2048Mi"
+            cpu: "2000m"

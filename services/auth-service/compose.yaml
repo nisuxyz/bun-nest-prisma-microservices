@@ -9,7 +9,7 @@ services:
       - .:/app
     environment:
       # - NODE_ENV=production
-      - DATABASE_URL=postgres://user:password@db:5432/spinroute_auth
+      - DATABASE_URL=postgres://userlocaldevpassworddb:5432/auth_db
     depends_on:
       - db
   db:
@@ -17,6 +17,6 @@ services:
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=spinroute_auth
+      - POSTGRES_DB=auth_db
     ports:
       - "5432:5432"

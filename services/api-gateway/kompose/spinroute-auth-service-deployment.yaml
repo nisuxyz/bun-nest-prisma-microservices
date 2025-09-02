@@ -25,7 +25,7 @@ spec:
       containers:
         - env:
             - name: DATABASE_URL
-              value: postgres://user:password@db:5432/spinroute_auth
+              value: postgres://userlocaldevpassworddb:5432/auth_db
           image: spinroute-auth-service
           name: spinroute-auth-service
           ports:
