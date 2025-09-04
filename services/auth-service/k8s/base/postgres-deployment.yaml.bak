@@ -3,23 +3,23 @@ kind: Deployment
 metadata:
   name: auth-postgres
   labels:
-    app: micro-services-blog
+    app: microservices-blog
 spec:
   replicas: 1  # PostgreSQL doesn't support multiple replicas without additional setup
   selector:
     matchLabels:
-      app: micro-services-blog
+      app: microservices-blog
   template:
     metadata:
       labels:
-        app: micro-services-blog
+        app: microservices-blog
     spec:
       containers:
-      - name: postgres
+      - name: auth-pg
         image: postgres:15-alpine  # Alpine for smaller image size
         ports:
         - containerPort: 5432
-          name: postgres
+          name: auth-pg
         # env:
         # # These will be overridden by secrets in production
         # - name: POSTGRES_DB
@@ -32,7 +32,7 @@ spec:
         - name: postgres-storage
           mountPath: /var/lib/postgresql/data
           # PostgreSQL needs a subdirectory for its data
-          subPath: postgres
+          subPath: auth-pg
         # Health checks ensure the database is ready before services connect
         readinessProbe:
           exec:

@@ -3,15 +3,15 @@ kind: Deployment
 metadata:
   name: api-gateway
   labels:
-    app: micro-services-blog
+    app: microservices-blog
 spec:
   selector:
     matchLabels:
-      app: micro-services-blog
+      app: microservices-blog
   template:
     metadata:
       labels:
-        app: micro-services-blog
+        app: microservices-blog
     spec:
       containers:
       - name: api-gateway

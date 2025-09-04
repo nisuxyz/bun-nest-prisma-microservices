@@ -1,34 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres
+  namespace: microservices-blog
+  name: auth-pg
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: auth-pg
+      service: auth-service
   template:
     metadata:
       labels:
-        app: postgres
+        app: auth-pg
+        service: auth-service
     spec:
       containers:
-        - name: postgres
+        - name: auth-pg
           image: 'postgres:15-alpine'
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5432
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
           envFrom:
-            - configMapRef:
-                name: postgres-secret
-          # volumeMounts:
-          #   - mountPath: /var/lib/postgresql/data
-          #     name: postgresdata
+            - secretRef:
+                name: auth-pg-secret
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
-      volumes:
-      - name: postgres-storage
-        hostPath:
-          path: /host-mount/services/auth-service/.postgres
-          type: DirectoryOrCreate
+      # volumes:
+      # - name: postgres-storage
+      #   emptyDir: {}
+        # hostPath:
+        #   path: /host-mount/services/auth-service/.postgres
+        #   type: DirectoryOrCreate

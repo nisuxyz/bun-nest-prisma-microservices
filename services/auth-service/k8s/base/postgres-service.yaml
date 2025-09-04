@@ -1,12 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-postgres
+  namespace: microservices-blog
+  name: auth-pg
   labels:
-    app: micro-services-blog
+    app: auth-pg
+    service: auth-service
 spec:
   type: NodePort
   ports:
     - port: 5432
   selector:
-    app: postgres
+    app: auth-pg
+    service: auth-service

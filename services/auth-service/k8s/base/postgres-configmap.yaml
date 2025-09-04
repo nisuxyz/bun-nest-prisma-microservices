@@ -1,9 +1,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-secret
+  namespace: microservices-blog
+  name: auth-pg-config
   labels:
-    app: postgres
+    service: auth-service
 data:
   POSTGRES_DB: auth_db
   POSTGRES_USER: auth_service_user

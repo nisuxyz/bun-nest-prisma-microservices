@@ -9,5 +9,4 @@ resources:
 labels:
 - includeSelectors: true
   pairs:
-    app.kubernetes.io/name: microblog
-    app.kubernetes.io/part-of: microblog-platform
+    app.kubernetes.io/name: microservices-blog

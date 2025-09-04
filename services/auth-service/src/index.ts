@@ -11,7 +11,7 @@ const app = new Hono()
 // Health check routes (must be before auth routes)
 app.route('/', healthRouter);
 
-app.get('/', (c) => {
+app.get('/api/hello', (c) => {
   return c.text('hello auth-service')
 })
   .get('/api/db-cxn-test', async (c) => {

@@ -8,19 +8,14 @@ resources:
 # - ../../../services/api-gateway/k8s/overlays/local
 # - ../../../services/keycloak/k8s/overlays/local
 - ../../../services/auth-service/k8s/overlays/local
-# - ../../../frontend/k8s/overlays/local
+- ../../../frontend/k8s/overlays/local
+# - ../../../services/posts-service/k8s/overlays/local
 
 # Namespace for local development
-namespace: microblog-local
+namespace: microservices-blog
 
 # Environment-specific labels
 labels:
 - includeSelectors: true
   pairs:
     environment: local
-
-# This is a powerful Kustomize feature - generating ConfigMaps
-configMapGenerator:
-- name: local-dev-config
-  envs:
-  - .env

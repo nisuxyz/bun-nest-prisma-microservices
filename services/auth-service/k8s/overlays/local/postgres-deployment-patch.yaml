@@ -1,39 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-postgres
+  namespace: microservices-blog
+  name: auth-pg
 spec:
+  selector:
+    matchLabels:
+      app: auth-pg
+      service: auth-service
   template:
     spec:
-      # initContainers:
-      # - name: volume-permissions
-      #   image: busybox
-      #   command: ["/bin/sh"]
-      #   args: ["-c", "chmod -R 755 /var/lib/postgresql && chown 999:999 /var/lib/postgresql"]
-      #   volumeMounts:
-      #   - name: 
-      #     mountPath: /var/lib/postgresql
-      containers:
-      - name: postgres
-        env:
-        - name: POSTGRES_DB
-          value: auth_db
-        - name: POSTGRES_USER
-          value: user
-        - name: POSTGRES_PASSWORD
-          value: localdevpassword
-        # - name: POSTGRES_USER
-        #   value: "user"
-        # # Fix: Use EITHER value OR valueFrom, not both
-        # - name: POSTGRES_PASSWORD
-        #   value: "password"
-        # These can stay as literal values since they're not sensitive
-        - name: POSTGRES_INITDB_ARGS
-          value: "--encoding=UTF8 --locale=en_US.UTF-8"
-        - name: POSTGRES_ARGS
-          value: "-c log_statement=all -c log_connections=on"
       # Add the volume definition for local development
-      
       volumes:
       - name: postgres-storage
         hostPath:

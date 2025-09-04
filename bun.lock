@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "micro-services-blog",
+      "name": "microservices-blog",
     },
     "services/api-gateway": {
       "name": "api-gateway",

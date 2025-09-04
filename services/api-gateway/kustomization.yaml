@@ -1,4 +1,4 @@
-namespace: spinroute
+namespace: microservices-blog
 namePrefix: sr-
 nameSuffix: "-dev"
 labels:

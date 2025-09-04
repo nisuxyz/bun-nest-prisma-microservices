@@ -1,14 +1,14 @@
 {
-  "name": "micro-services-blog",
+  "name": "microservices-blog",
   "private": true,
   "scripts": {
     "minikube:start": "minikube start --mount --mount-string $(pwd):/host-mount --driver=podman",
     "minikube:stop": "minikube stop",
     "minikube:delete": "minikube delete",
     "minikube:enable:ingress": "minikube addons enable ingress && minikube addons enable ingress-dns",
-    "k8s:namespace:create": "minikube kubectl -- create namespace microblog-local",
-    "k8s:namespace:delete": "minikube kubectl -- delete namespace microblog-local",
-    "k8s:namespace:set-current": "minikube kubectl -- config set-context --current --namespace=microblog-local",
+    "k8s:namespace:create": "minikube kubectl -- create namespace microservices-blog",
+    "k8s:namespace:delete": "minikube kubectl -- delete namespace microservices-blog",
+    "k8s:namespace:set-current": "minikube kubectl -- config set-context --current --namespace=microservices-blog",
     "k8s:local": "minikube kubectl -- apply -k ./k8s/overlays/local",
     "k8s:local:dry": "minikube kubectl -- kustomize ./k8s/overlays/local",
     "k8s:local:delete": "minikube kubectl -- delete -k ./k8s/overlays/local",
@@ -18,7 +18,7 @@
     "k8s:pods:watch": "minikube kubectl -- get pods -w",
     "k8s:services": "minikube kubectl -- get services",
     "k8s:services:watch": "minikube kubectl -- get services -w",
-    "k8s:logs": "minikube kubectl -- logs -l app=micro-services-blog -f",
+    "k8s:logs": "minikube kubectl -- logs -l app=microservices-blog -f",
     "k8s:exec:auth": "minikube kubectl -- exec -it deploy/auth-service -- /bin/sh",
     "k8s:exec:frontend": "minikube kubectl -- exec -it deploy/frontend -- /bin/sh",
     "k8s:bootstrap": "bun run minikube:start && bun run k8s:namespace:create && bun run k8s:namespace:set-current && bun run minikube:enable:ingress"

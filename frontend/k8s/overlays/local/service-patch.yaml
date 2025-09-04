@@ -4,7 +4,7 @@ metadata:
   name: frontend
 spec:
   selector:
-    app: micro-services-blog
+    app: microservices-blog
   ports:
   - port: 80
     targetPort: 4200

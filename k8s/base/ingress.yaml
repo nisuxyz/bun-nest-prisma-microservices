@@ -1,9 +1,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: micro-services-blog-ingress
+  namespace: microservices-blog
+  name: microservices-blog-ingress
   labels:
-    app: micro-services-blog
+    app: microservices-blog
   annotations:
     # These annotations configure the ingress controller behavior
     # nginx.ingress.kubernetes.io/rewrite-target: /$2

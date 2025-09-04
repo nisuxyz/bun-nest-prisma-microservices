@@ -2,9 +2,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: microservices-blog
   name: auth-service
 spec:
+  selector:
+    matchLabels:
+      app: auth-backend
+      service: auth-service
   template:
+    metadata:
+      labels:
+        app: auth-backend
+        service: auth-service
     spec:
       containers:
       - name: auth-service
@@ -12,6 +21,14 @@ spec:
         image: auth-service:dev
         imagePullPolicy: Never  # Don't try to pull, use local build
         
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          
         # Override command for development with hot reload
         command: ["bun", "run", "start:dev"]
         
@@ -20,10 +37,10 @@ spec:
         - name: code
           mountPath: /app
         
-        # Instead of hardcoding environment variables, reference the ConfigMap
-        envFrom:
-        - secretRef:
-            name: auth-service-secrets  # Kustomize will update this to include the hash
+        # # Instead of hardcoding environment variables, reference the ConfigMap
+        # envFrom:
+        # - secretRef:
+        #     name: auth-service-secrets  # Kustomize will update this to include the hash
       
       # Define the volume that maps to your local filesystem
       volumes:
