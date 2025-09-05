@@ -21,7 +21,7 @@
     "k8s:logs": "minikube kubectl -- logs -l app=microservices-blog -f",
     "k8s:exec:auth": "minikube kubectl -- exec -it deploy/auth-service -- /bin/sh",
     "k8s:exec:frontend": "minikube kubectl -- exec -it deploy/frontend -- /bin/sh",
-    "k8s:bootstrap": "bun run minikube:start && bun run k8s:namespace:create && bun run k8s:namespace:set-current && bun run minikube:enable:ingress",
+    "k8s:bootstrap": "bun run minikube:start && bun run k8s:namespace:create && bun run k8s:namespace:set-current && bun run minikube:enable:ingress && bun run keycloak:update-ingress && bun run keycloak:urls",
     // service specific scripts
     "keycloak:update-ingress": "bun run --filter keycloak update:ingress",
     "keycloak:urls": "bun run --filter keycloak get:urls"
