@@ -2,23 +2,23 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: microservices-blog
-  name: gateway-service
+  name: api-gateway
   labels:
-    app: gateway-backend
-    service: gateway-service
+    app: api-gateway-backend
+    service: api-gateway
 spec:
   selector:
     matchLabels:
-      app: gateway-backend
-      service: gateway-service
+      app: api-gateway-backend
+      service: api-gateway
   template:
     metadata:
       labels:
-        app: gateway-backend
-        service: gateway-service
+        app: api-gateway-backend
+        service: api-gateway
     spec:
       containers:
-      - name: gateway-service
+      - name: api-gateway
         image: api-gateway:latest
         ports:
         - containerPort: 3000

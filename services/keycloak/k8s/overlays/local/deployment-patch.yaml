@@ -1,47 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: microservices-blog
   name: keycloak
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: keycloak
+      service: keycloak
   template:
     spec:
-      initContainers:
-      # Wait for database to be ready
-      - name: wait-for-postgres
-        image: busybox:1.35
-        command: 
-        - sh
-        - -c
-        - |
-          echo "Waiting for PostgreSQL to be ready..."
-          until nc -z keycloak-postgres 5432; do
-            echo "PostgreSQL is not ready yet. Waiting..."
-            sleep 2
-          done
-          echo "PostgreSQL is ready!"
-      
       containers:
       - name: keycloak
-        args:
-          - start-dev
-          - --import-realm  # Auto-import realm configuration
-        
-        envFrom:
-        - secretRef:
-            name: keycloak-secrets
-        - configMapRef:
-            name: keycloak-config
-        
-        # Mount realm configuration for auto-import
-        volumeMounts:
-        - name: realm-config
-          mountPath: /opt/keycloak/data/import
-          readOnly: true
-      
-      volumes:
-      - name: realm-config
-        configMap:
-          name: keycloak-realm-config
+        args: ["start-dev"]
+        env:
+        - name: KC_LOG_LEVEL
+          value: "DEBUG"
+        - name: KC_BOOTSTRAP_ADMIN_USERNAME
+          value: "admin"
+        - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+          value: "admin"
+        - name: KC_CACHE
+          value: "local"
+        # Remove JGroups clustering
+        - name: JAVA_OPTS_APPEND
+          value: ""

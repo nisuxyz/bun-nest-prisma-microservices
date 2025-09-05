@@ -10,7 +10,7 @@ patches:
 - path: deployment-patch.yaml
   target:
     kind: Deployment
-    name: gateway-service
+    name: api-gateway
 
 # replace with labels because commonLabels is deprecated
 labels:

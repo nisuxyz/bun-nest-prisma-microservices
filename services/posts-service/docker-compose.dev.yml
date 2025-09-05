@@ -12,7 +12,7 @@ services:
     depends_on:
       - nest-postgres-dev
     env_file:
-      - .env.dev
+      - .env
     # podman-compose doesn't support this yet.
     # you can try to use it if you install docker-compose
     # develop:
@@ -32,9 +32,9 @@ services:
     ports:
       - '5432:5432'
     env_file:
-      - .env.dev
+      - .env
     volumes:
-      - ./nest-postgres-data:/var/lib/postgresql/data
+      - ./.postgres:/var/lib/postgresql/data
 
 # volumes:
 #   nest-postgres-dev:

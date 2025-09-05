@@ -1,0 +1,8 @@
+{
+  "name": "keycloak",
+  "private": true,
+  "scripts": {
+    "update:ingress": "sed -i \"s/KEYCLOAK_HOST/keycloak.$(minikube ip).nip.io/\" ./k8s/base/ingress.yaml",
+    "get:urls": "KEYCLOAK_URL=https://keycloak.$(minikube ip).nip.io && echo '' && echo \"Keycloak:                 $KEYCLOAK_URL\" && echo \"Keycloak Admin Console:   $KEYCLOAK_URL/admin\" && echo \"Keycloak Account Console: $KEYCLOAK_URL/realms/myrealm/account\" && echo ''"
+  }
+}

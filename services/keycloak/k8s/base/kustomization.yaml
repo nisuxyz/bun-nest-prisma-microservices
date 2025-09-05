@@ -1,15 +1,20 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+# Reference the official Keycloak manifests directly
 resources:
-- deployment.yaml
-- service.yaml
-- postgres-deployment.yaml
-- postgres-service.yaml
+  # - https://raw.githubusercontent.com/keycloak/keycloak-quickstarts/refs/heads/main/kubernetes/keycloak.yaml
+  # - https://raw.githubusercontent.com/keycloak/keycloak-quickstarts/refs/heads/main/kubernetes/keycloak-ingress.yaml
+  - postgres.yaml
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+namespace: microservices-blog
 
 labels:
 - includeSelectors: true
   pairs:
-    app.kubernetes.io/component: keycloak
+    app.kubernetes.io/component: authentication
     app.kubernetes.io/name: keycloak
-    app.kubernetes.io/part-of: microblog-platform
+    app.kubernetes.io/part-of: microservices-blog

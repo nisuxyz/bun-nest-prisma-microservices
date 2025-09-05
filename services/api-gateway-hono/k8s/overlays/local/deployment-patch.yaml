@@ -2,17 +2,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: gateway-backend
-  name: gateway-service
+  namespace: microservices-blog
+  name: api-gateway
 spec:
   selector:
     matchLabels:
-      app: gateway-backend
-      service: gateway-service
+      app: microservices-blog
+      service: api-gateway
   template:
     spec:
       containers:
-      - name: gateway-service
+      - name: api-gateway
         # Use the dev container that expects code at /app
         image: api-gateway:dev
         imagePullPolicy: Never  # Don't try to pull, use local build
@@ -36,7 +36,7 @@ spec:
         # # Instead of hardcoding environment variables, reference the ConfigMap
         # envFrom:
         # - secretRef:
-        #     name: gateway-service-secrets  # Kustomize will update this to include the hash
+        #     name: api-gateway-secrets  # Kustomize will update this to include the hash
 
       # Define the volume that maps to your local filesystem
       volumes:
