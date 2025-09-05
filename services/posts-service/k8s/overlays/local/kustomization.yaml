@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Start with the base configuration
+resources:
+- ../../base
+
+# Apply our local development patch
+patches:
+- path: deployment-patch.yaml
+  target:
+    kind: Deployment
+    name: posts-service
+- path: postgres-deployment-patch.yaml
+  target:
+    kind: Deployment 
+    name: posts-pg
+    
+labels:
+- includeSelectors: true
+  pairs:
+    environment: local
+    variant: local-dev
+
+secretGenerator:
+- name: posts-pg-secret
+  literals:
+  - POSTGRES_DB=posts_db
+  - POSTGRES_USER=posts_service_user
+  - POSTGRES_PASSWORD=localdevpassword
+  - POSTGRES_INITDB_ARGS="--encoding=UTF8 --locale=en_US.UTF-8"
+  - POSTGRES_ARGS="-c log_statement=all -c log_connections=on"

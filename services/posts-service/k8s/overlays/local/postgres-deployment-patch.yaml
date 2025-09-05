@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: microservices-blog
+  name: posts-pg
+spec:
+  selector:
+    matchLabels:
+      app: posts-pg
+      service: posts-service
+  template:
+    spec:
+      # Add the volume definition for local development
+      volumes:
+      - name: postgres-storage
+        hostPath:
+          path: /host-mount/services/posts-service/.postgres
+          type: DirectoryOrCreate

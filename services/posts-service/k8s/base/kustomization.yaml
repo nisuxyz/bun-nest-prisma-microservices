@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- deployment.yaml
+- service.yaml
+# - postgres-configmap.yaml
+- postgres-deployment.yaml
+- postgres-service.yaml
+
+# Labels specific to this service
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/name: posts-service
+    app.kubernetes.io/component: authentication
+    app.kubernetes.io/part-of: microservices-blog
+
+# secretGenerator:
+#   - name: posts-pg-secret
+#     envs:
+#       - .env.postgres

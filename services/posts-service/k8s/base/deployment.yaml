@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: microservices-blog
+  name: posts-service
+  labels:
+    app: posts-backend
+    service: posts-service
+spec:
+  selector:
+    matchLabels:
+      app: posts-backend
+      service: posts-service
+  template:
+    metadata:
+      labels:
+        app: posts-backend
+        service: posts-service
+    spec:
+      initContainers:
+      # This container runs before the main posts-service container
+      - name: wait-for-postgres
+        image: busybox:1.35
+        command: 
+        - sh
+        - -c
+        - |
+          echo "Waiting for PostgreSQL to be ready..."
+          until nc -z posts-pg 5432; do
+            echo "PostgreSQL is not ready yet. Waiting..."
+            sleep 2
+          done
+          echo "PostgreSQL is ready!"
+      containers:
+      - name: posts-service
+        image: posts-service:latest
+        ports:
+        - containerPort: 3000
+          name: http
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 256Mi
